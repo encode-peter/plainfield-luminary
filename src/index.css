@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 225 30% 8%;
+    --foreground: 45 100% 95%;
+
+    --card: 225 25% 12%;
+    --card-foreground: 45 100% 95%;
+
+    --popover: 225 25% 12%;
+    --popover-foreground: 45 100% 95%;
+
+    --primary: 45 100% 60%;
+    --primary-foreground: 225 30% 8%;
+
+    --secondary: 140 60% 45%;
+    --secondary-foreground: 225 30% 8%;
+
+    --muted: 225 20% 20%;
+    --muted-foreground: 45 30% 70%;
+
+    --accent: 140 60% 45%;
+    --accent-foreground: 225 30% 8%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 225 20% 25%;
+    --input: 225 20% 20%;
+    --ring: 45 100% 60%;
+
+    --radius: 0.75rem;
+    
+    /* Luminary theme colors */
+    --glow-amber: 45 100% 60%;
+    --glow-gold: 40 95% 55%;
+    --tree-green: 140 60% 45%;
+    --night-sky: 225 30% 8%;
+    --star-white: 45 100% 95%;
+    
+    /* Gradients */
+    --gradient-glow: linear-gradient(135deg, hsl(45 100% 60% / 0.2), hsl(40 95% 55% / 0.1));
+    --gradient-night: linear-gradient(180deg, hsl(225 30% 8%), hsl(225 25% 12%));
+    
+    /* Shadows */
+    --shadow-glow: 0 0 30px hsl(45 100% 60% / 0.5), 0 0 60px hsl(45 100% 60% / 0.3);
+    --shadow-soft: 0 10px 40px hsl(225 30% 8% / 0.5);
+    
+    /* Animations */
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 225 30% 8%;
+    --foreground: 45 100% 95%;
+  }
+}
+
+@layer utilities {
+  .glow-text {
+    text-shadow: 0 0 20px hsl(var(--glow-amber) / 0.8), 0 0 40px hsl(var(--glow-amber) / 0.5);
+  }
+  
+  .glow-effect {
+    box-shadow: var(--shadow-glow);
+  }
+  
+  .sparkle {
+    animation: sparkle 2s ease-in-out infinite;
+  }
+  
+  @keyframes sparkle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  .animate-twinkle {
+    animation: twinkle 3s ease-in-out infinite;
+  }
+  
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
