@@ -53,7 +53,7 @@ export const Hero = () => {
       </div>
 
       <div className="container mx-auto px-4 relative z-20">
-      <div className="flex flex-col items-center text-center space-y-8">
+        <div className="flex flex-col items-center text-center space-y-8">
           {/* Title */}
           <div className="space-y-4">
             <h1 className="text-5xl md:text-7xl font-bold glow-text">
@@ -66,7 +66,11 @@ export const Hero = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
-            <a href="https://www.zeffy.com/en-US/donation-form/light-and-unite-plainfield" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://www.zeffy.com/en-US/donation-form/light-and-unite-plainfield"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Button
                 size="lg"
                 className="bg-primary hover:bg-primary/90 text-primary-foreground glow-effect transition-all duration-300 hover:scale-105"
@@ -78,7 +82,7 @@ export const Hero = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-primary text-primary hover:bg-primary/10 transition-all duration-300"
+                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300"
               >
                 Learn More
               </Button>
@@ -109,7 +113,7 @@ export const Hero = () => {
           <div
             key={i}
             className={`w-3 h-3 rounded-full sparkle ${
-              i % 3 === 0 ? 'bg-primary' : i % 3 === 1 ? 'bg-secondary' : 'bg-accent'
+              i % 3 === 0 ? "bg-primary" : i % 3 === 1 ? "bg-secondary" : "bg-accent"
             }`}
             style={{ animationDelay: `${i * 0.2}s` }}
           />

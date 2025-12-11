@@ -1,5 +1,6 @@
 import { Facebook } from "lucide-react";
 import logo from "@/assets/logo.png";
+import { HashLink } from "./HashLink";
 
 export const Footer = () => {
   return (
@@ -18,9 +19,21 @@ export const Footer = () => {
           <div>
             <h3 className="font-semibold text-lg mb-4">Quick Links</h3>
             <ul className="space-y-2 text-muted-foreground">
-              <li><a href="#about" className="hover:text-primary transition-colors">About</a></li>
-              <li><a href="#get-involved" className="hover:text-primary transition-colors">Get Involved</a></li>
-              <li><a href="#contact" className="hover:text-primary transition-colors">Contact</a></li>
+              <li>
+                <HashLink to="/#about" className="hover:text-primary transition-colors">
+                  About
+                </HashLink>
+              </li>
+              <li>
+                <HashLink to="/#get-involved" className="hover:text-primary transition-colors">
+                  Get Involved
+                </HashLink>
+              </li>
+              <li>
+                <HashLink to="/#contact" className="hover:text-primary transition-colors">
+                  Contact
+                </HashLink>
+              </li>
             </ul>
           </div>
 

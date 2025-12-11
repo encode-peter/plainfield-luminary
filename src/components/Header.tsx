@@ -8,8 +8,8 @@ export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "Gallery", href: "/gallery" },
+    // { name: "Home", href: "/" },
+    // { name: "Gallery", href: "/gallery" },
   ];
 
   return (
