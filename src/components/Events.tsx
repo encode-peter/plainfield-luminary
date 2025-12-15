@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { Calendar, Clock, MapPin, Users } from "lucide-react";
-import { getEvents as fetchEvents } from "@/data/events";
-import { Event } from "@/types/eventTypes";
+import { getEvents } from "@/data/events";
+import { Event } from "@/types/EventTypes";
 
 export const Events = () => {
   const donationUrl = "https://www.zeffy.com/en-US/donation-form/light-and-unite-plainfield";
@@ -13,7 +14,7 @@ export const Events = () => {
   useEffect(() => {
     const loadEvents = async () => {
       setLoading(true);
-      const data = (await fetchEvents()).sort(
+      const data = (await getEvents()).sort(
         (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
       );
       setEvents(data);
@@ -22,16 +23,8 @@ export const Events = () => {
     loadEvents();
   }, []);
 
-  if (loading) {
-    return (
-      <section className="py-24 px-4 bg-background text-center">
-        <p className="text-muted-foreground">Loading events...</p>
-      </section>
-    );
-  }
-
   return (
-    <section id="events" className="py-24 px-4 bg-background">
+    <section id="events" className="py-24 px-4">
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4 glow-text">Upcoming Events</h2>
@@ -42,12 +35,15 @@ export const Events = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {events.length === 0 && (
+          {events.length === 0 && !loading && (
             <p className="text-muted-foreground col-span-full text-center">
               No upcoming events at the moment. Please check back later!
             </p>
           )}
-          {events.length > 0 &&
+          {loading ? (
+            <Spinner className="size-10" />
+          ) : (
+            events.length > 0 &&
             events.map((event, index) => (
               <Card
                 key={event.id}
@@ -93,19 +89,16 @@ export const Events = () => {
                 </div>
 
                 {index === 0 && (
-                  <a
-                    href={donationUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block mt-6"
+                  <Button
+                    className="block mt-6 w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground"
+                    onClick={() => window.open(donationUrl, "_blank")}
                   >
-                    <Button className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground">
-                      Donate
-                    </Button>
-                  </a>
+                    Donate
+                  </Button>
                 )}
               </Card>
-            ))}
+            ))
+          )}
         </div>
 
         <div className="mt-16 text-center">

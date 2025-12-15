@@ -5,6 +5,7 @@ import community2 from "@/assets/community-2.jpg";
 import community3 from "@/assets/community-3.jpg";
 import community4 from "@/assets/community-4.jpg";
 import community5 from "@/assets/community-5.jpg";
+import { HashLink } from "./HashLink";
 
 const images = [community1, community2, community3, community4, community5];
 
@@ -19,19 +20,19 @@ export const Hero = () => {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background image carousel */}
       {images.map((img, index) => (
         <div
           key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ${
+          className={`absolute inset-0 transition-opacity duration-1000 mt-16 ${
             index === currentImage ? "opacity-100" : "opacity-0"
           }`}
         >
           <img
             src={img}
             alt={`Plainfield Luminary Program community ${index + 1}`}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-center"
           />
           <div className="absolute inset-0 bg-background/70" />
         </div>
@@ -66,19 +67,19 @@ export const Hero = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
-            <a
-              href="https://www.zeffy.com/en-US/donation-form/light-and-unite-plainfield"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Button
+              size="lg"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground glow-effect transition-all duration-300 hover:scale-105"
+              onClick={() =>
+                window.open(
+                  "https://www.zeffy.com/en-US/donation-form/light-and-unite-plainfield",
+                  "_blank"
+                )
+              }
             >
-              <Button
-                size="lg"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground glow-effect transition-all duration-300 hover:scale-105"
-              >
-                Donate Now
-              </Button>
-            </a>
-            <a href="#about">
+              Donate Now
+            </Button>
+            <HashLink to="#about">
               <Button
                 size="lg"
                 variant="outline"
@@ -86,7 +87,7 @@ export const Hero = () => {
               >
                 Learn More
               </Button>
-            </a>
+            </HashLink>
           </div>
 
           {/* Carousel indicators */}

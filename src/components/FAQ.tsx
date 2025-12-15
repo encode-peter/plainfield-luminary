@@ -54,7 +54,7 @@ const faqs = [
 
 export const FAQ = () => {
   return (
-    <section id="faq" className="py-20 bg-card">
+    <section id="faq" className="py-20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold glow-text mb-4">

@@ -6,6 +6,28 @@
 All colors MUST be HSL.
 */
 
+div.index-section > section:nth-child(odd) {
+  @apply bg-background;
+}
+
+div.index-section > section:nth-child(even) {
+  @apply bg-card;
+}
+
+.flex.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary));
+    border-radius: 12px;
+}
+
+
 @layer base {
   :root {
     --background: 225 30% 8%;
@@ -37,22 +59,22 @@ All colors MUST be HSL.
     --ring: 45 100% 60%;
 
     --radius: 0.75rem;
-    
+
     /* Luminary theme colors */
     --glow-amber: 45 100% 60%;
     --glow-gold: 40 95% 55%;
     --tree-green: 140 60% 45%;
     --night-sky: 225 30% 8%;
     --star-white: 45 100% 95%;
-    
+
     /* Gradients */
     --gradient-glow: linear-gradient(135deg, hsl(45 100% 60% / 0.2), hsl(40 95% 55% / 0.1));
     --gradient-night: linear-gradient(180deg, hsl(225 30% 8%), hsl(225 25% 12%));
-    
+
     /* Shadows */
     --shadow-glow: 0 0 30px hsl(45 100% 60% / 0.5), 0 0 60px hsl(45 100% 60% / 0.3);
     --shadow-soft: 0 10px 40px hsl(225 30% 8% / 0.5);
-    
+
     /* Animations */
     --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -83,36 +105,68 @@ All colors MUST be HSL.
   .glow-text {
     text-shadow: 0 0 20px hsl(var(--glow-amber) / 0.8), 0 0 40px hsl(var(--glow-amber) / 0.5);
   }
-  
+
   .glow-effect {
     box-shadow: var(--shadow-glow);
   }
-  
+
   .sparkle {
     animation: sparkle 2s ease-in-out infinite;
   }
-  
+
   @keyframes sparkle {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
   }
-  
+
   @keyframes twinkle {
-    0%, 100% { opacity: 0.7; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.1); }
+    0%,
+    100% {
+      opacity: 0.7;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.1);
+    }
   }
-  
+
   @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
   }
-  
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .animate-twinkle {
     animation: twinkle 3s ease-in-out infinite;
   }
-  
+
   .animate-float {
     animation: float 4s ease-in-out infinite;
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out forwards;
   }
 }
 

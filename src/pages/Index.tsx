@@ -3,23 +3,25 @@ import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
 import { Mission } from "@/components/Mission";
 import { Events } from "@/components/Events";
-import { HowItWorks } from "@/components/HowItWorks";
+import { Sponsors } from "@/components/Sponsors";
 import { Impact } from "@/components/Impact";
+import { HowItWorks } from "@/components/HowItWorks";
 import { Donation } from "@/components/Donation";
-import { GetInvolved } from "@/components/GetInvolved";
 import { Volunteer } from "@/components/Volunteer";
+import { GetInvolved } from "@/components/GetInvolved";
 import { FAQ } from "@/components/FAQ";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen index-section">
       <Header />
       <Hero />
       <About />
       <Mission />
       <Events />
+      <Sponsors />
       <Impact />
       <HowItWorks />
       <Donation />

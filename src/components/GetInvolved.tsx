@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Calendar, DollarSign, HandHeart } from "lucide-react";
+import { HashLink } from "./HashLink";
 
 export const GetInvolved = () => {
   const donationUrl = "https://www.zeffy.com/en-US/donation-form/light-and-unite-plainfield";
-  
+
   const ways = [
     {
       icon: DollarSign,
@@ -23,21 +24,21 @@ export const GetInvolved = () => {
     {
       icon: Calendar,
       title: "Attend the Event",
-      description: "Join us for a magical evening of community, music, and thousands of glowing lights.",
+      description:
+        "Join us for a magical evening of community, music, and thousands of glowing lights.",
       action: "Learn More",
       link: "#about",
     },
   ];
 
   return (
-    <section id="get-involved" className="py-24 px-4 bg-background">
+    <section id="get-involved" className="py-24 px-4">
       <div className="container mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 glow-text">
-            Get Involved
-          </h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 glow-text">Get Involved</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            There are many ways to participate in the Plainfield Luminary Program and help light up our community.
+            There are many ways to participate in the Plainfield Luminary Program and help light up
+            our community.
           </p>
         </div>
 
@@ -54,18 +55,11 @@ export const GetInvolved = () => {
                 <h3 className="text-2xl font-semibold">{way.title}</h3>
                 <p className="text-muted-foreground flex-grow">{way.description}</p>
               </div>
-              <a 
-                href={way.link} 
-                target={way.link.startsWith('http') ? '_blank' : undefined}
-                rel={way.link.startsWith('http') ? 'noopener noreferrer' : undefined}
-                className="block mt-6"
-              >
-                <Button
-                  className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground"
-                >
+              <HashLink to={way.link} className="block mt-6">
+                <Button className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground">
                   {way.action}
                 </Button>
-              </a>
+              </HashLink>
             </Card>
           ))}
         </div>

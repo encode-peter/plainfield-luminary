@@ -3,7 +3,7 @@ import { Sparkles, TreePine, MapPin } from "lucide-react";
 
 export const Mission = () => {
   return (
-    <section className="py-24 px-4 bg-gradient-to-b from-background to-card relative overflow-hidden">
+    <section className="py-24 px-4 relative overflow-hidden">
       {/* Decorative elements */}
       <div className="absolute top-10 left-10 w-20 h-20 bg-primary/10 rounded-full blur-3xl" />
       <div className="absolute bottom-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-3xl" />

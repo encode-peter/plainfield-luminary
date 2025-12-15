@@ -10,7 +10,7 @@ import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Lock, Plus, Trash2, Edit2, Calendar, Link, Save, Eye, EyeOff } from "lucide-react";
-import { getEvents, saveEvent, deleteEvent } from "@/data/events";
+import { getEvents, addEvent, deleteEvent, updateEvent } from "@/data/events";
 import { getSiteSettings, saveSiteSettings } from "@/data/settings";
 import {
   Dialog,
@@ -20,8 +20,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { isAdminUser } from "@/data/user";
-import { Event } from "@/types/eventTypes";
+import { Event } from "@/types/EventTypes";
 import { DateTimePicker } from "@/components/ui/date-time-picker";
+import { getSponsors, addSponsor, updateSponsor, deleteSponsor } from "@/data/sponsors";
+import { Sponsor } from "@/types/SponsorTypes";
 
 const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -34,7 +36,6 @@ const Admin = () => {
   const [editingEventDateTime, setEditingEventDateTime] = useState<Date | undefined>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
-
   const [newEventDateTime, setNewEventDateTime] = useState<Date | undefined>();
   const [newEvent, setNewEvent] = useState<Event>({
     id: "",
@@ -44,6 +45,15 @@ const Admin = () => {
     description: "",
     attendees: "",
   });
+  const [sponsors, setSponsors] = useState<Sponsor[]>([]);
+  const [newSponsor, setNewSponsor] = useState<Omit<Sponsor, "id">>({
+    name: "",
+    description: "",
+    imageUrl: "",
+    websiteUrl: "",
+  });
+  const [editingSponsor, setEditingSponsor] = useState<Sponsor | null>(null);
+  const [isSponsorDialogOpen, setIsSponsorDialogOpen] = useState(false);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
@@ -61,6 +71,8 @@ const Admin = () => {
   const loadInitialData = async () => {
     const events = await getEvents();
     setLocalEvents(events);
+    const sponsors = await getSponsors();
+    setSponsors(sponsors);
     const settings = await getSiteSettings();
     setGalleryUrl(settings.googlePhotosEmbedUrl || "");
   };
@@ -92,8 +104,12 @@ const Admin = () => {
       });
       return;
     }
-    const eventWithId: Event = { ...newEvent, id: Date.now().toString() };
-    await saveEvent(eventWithId);
+    const { id, ...eventData } = newEvent;
+    const generatedId = await addEvent(eventData);
+    const eventWithId: Event = {
+      ...eventData,
+      id: generatedId,
+    };
     setLocalEvents((prev) => [...prev, eventWithId]);
     toast({ title: "Event Added" });
     setNewEvent({
@@ -109,7 +125,7 @@ const Admin = () => {
 
   const handleEditEvent = async () => {
     if (!editingEvent) return;
-    await saveEvent(editingEvent);
+    await updateEvent(editingEvent);
     setLocalEvents((prev) => prev.map((e) => (e.id === editingEvent.id ? editingEvent : e)));
     toast({ title: "Event Updated" });
     setEditingEvent(null);
@@ -119,6 +135,34 @@ const Admin = () => {
     await deleteEvent(event.id);
     setLocalEvents((prev) => prev.filter((e) => e.id !== event.id));
     toast({ title: "Event Deleted" });
+  };
+
+  const handleAddSponsor = async () => {
+    if (!newSponsor.name) {
+      toast({ title: "Sponsor name required", variant: "destructive" });
+      return;
+    }
+
+    const id = await addSponsor(newSponsor);
+    setSponsors((prev) => [...prev, { id, ...newSponsor }]);
+    setNewSponsor({ name: "", description: "", imageUrl: "", websiteUrl: "" });
+    setIsSponsorDialogOpen(false);
+    toast({ title: "Sponsor added" });
+  };
+
+  const handleEditSponsor = async () => {
+    if (!editingSponsor) return;
+
+    await updateSponsor(editingSponsor);
+    setSponsors((prev) => prev.map((s) => (s.id === editingSponsor.id ? editingSponsor : s)));
+    setEditingSponsor(null);
+    toast({ title: "Sponsor updated" });
+  };
+
+  const handleDeleteSponsor = async (id: string) => {
+    await deleteSponsor(id);
+    setSponsors((prev) => prev.filter((s) => s.id !== id));
+    toast({ title: "Sponsor deleted" });
   };
 
   const handleUpdateGalleryUrl = async () => {
@@ -261,18 +305,23 @@ const Admin = () => {
               {localEvents.map((event) => (
                 <Card key={event.id} className="p-4 bg-muted/50">
                   {editingEvent?.id === event.id ? (
-                    <div className="space-y-4">
-                      <Input
-                        value={editingEvent.title}
-                        onChange={(e) =>
-                          setEditingEvent({
-                            ...editingEvent,
-                            title: e.target.value,
-                          })
-                        }
-                        placeholder="Title"
-                      />
-                      <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <div className="space-y-2">
+                        <Label>Title *</Label>
+                        <Input
+                          value={editingEvent.title}
+                          onChange={(e) =>
+                            setEditingEvent({
+                              ...editingEvent,
+                              title: e.target.value,
+                            })
+                          }
+                          placeholder="Title"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label>Date & Time *</Label>
                         <DateTimePicker
                           date={editingEventDateTime}
                           setDate={(d: Date) => {
@@ -283,37 +332,49 @@ const Admin = () => {
                           }}
                         />
                       </div>
-                      <Input
-                        value={editingEvent.location}
-                        onChange={(e) =>
-                          setEditingEvent({
-                            ...editingEvent,
-                            location: e.target.value,
-                          })
-                        }
-                        placeholder="Location"
-                      />
-                      <Input
-                        value={editingEvent.attendees}
-                        onChange={(e) =>
-                          setEditingEvent({
-                            ...editingEvent,
-                            attendees: e.target.value,
-                          })
-                        }
-                        placeholder="Attendees"
-                      />
-                      <Textarea
-                        value={editingEvent.description}
-                        onChange={(e) =>
-                          setEditingEvent({
-                            ...editingEvent,
-                            description: e.target.value,
-                          })
-                        }
-                        placeholder="Description"
-                        rows={2}
-                      />
+
+                      <div className="space-y-2">
+                        <Label>Location</Label>
+                        <Input
+                          value={editingEvent.location}
+                          onChange={(e) =>
+                            setEditingEvent({
+                              ...editingEvent,
+                              location: e.target.value,
+                            })
+                          }
+                          placeholder="Location"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label>Attendees Info</Label>
+                        <Input
+                          value={editingEvent.attendees}
+                          onChange={(e) =>
+                            setEditingEvent({
+                              ...editingEvent,
+                              attendees: e.target.value,
+                            })
+                          }
+                          placeholder="Attendees"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label>Description</Label>
+                        <Textarea
+                          value={editingEvent.description}
+                          onChange={(e) =>
+                            setEditingEvent({
+                              ...editingEvent,
+                              description: e.target.value,
+                            })
+                          }
+                          placeholder="Description"
+                          rows={2}
+                        />
+                      </div>
                       <div className="flex gap-2">
                         <Button onClick={handleEditEvent}>Save Changes</Button>
                         <Button variant="outline" onClick={() => setEditingEvent(null)}>
@@ -355,6 +416,208 @@ const Admin = () => {
                           size="icon"
                           onClick={() => handleDeleteEvent(event)}
                           className="text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </Card>
+              ))}
+            </div>
+          </Card>
+
+          {/* Sponsors Section */}
+          <Card className="p-6 mb-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold">Sponsors</h2>
+
+              <Dialog open={isSponsorDialogOpen} onOpenChange={setIsSponsorDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Sponsor
+                  </Button>
+                </DialogTrigger>
+
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Add Sponsor</DialogTitle>
+                  </DialogHeader>
+
+                  <div className="space-y-4 pt-4">
+                    <div className="space-y-2">
+                      <Label>Name *</Label>
+                      <Input
+                        placeholder="Name"
+                        value={newSponsor.name}
+                        onChange={(e) => setNewSponsor({ ...newSponsor, name: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Website</Label>
+                      <Input
+                        placeholder="Website Url"
+                        value={newSponsor.websiteUrl}
+                        onChange={(e) =>
+                          setNewSponsor({ ...newSponsor, websiteUrl: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Image</Label>
+                      <p className="text-sm text-muted-foreground">
+                        You can either paste an image URL or upload a file.
+                      </p>
+                      <Input
+                        placeholder="Image URL"
+                        value={newSponsor.imageUrl}
+                        onChange={(e) => setNewSponsor({ ...newSponsor, imageUrl: e.target.value })}
+                      />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            setNewSponsor({ ...newSponsor, imageUrl: reader.result as string });
+                          };
+                          reader.readAsDataURL(file);
+                        }}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Description</Label>
+                      <Textarea
+                        placeholder="Description"
+                        value={newSponsor.description}
+                        onChange={(e) =>
+                          setNewSponsor({ ...newSponsor, description: e.target.value })
+                        }
+                      />
+                    </div>
+                    <Button onClick={handleAddSponsor} className="w-full">
+                      Add Sponsor
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
+
+            <div className="space-y-4">
+              {sponsors.map((sponsor) => (
+                <Card key={sponsor.id} className="p-4 bg-muted/50">
+                  {editingSponsor?.id === sponsor.id ? (
+                    <div className="space-y-2">
+                      <div className="space-y-2">
+                        <Label>Name *</Label>
+                        <Input
+                          value={editingSponsor.name}
+                          onChange={(e) =>
+                            setEditingSponsor({ ...editingSponsor, name: e.target.value })
+                          }
+                          placeholder="Sponsor Name"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label>Website URL</Label>
+                        <Input
+                          value={editingSponsor.websiteUrl}
+                          onChange={(e) =>
+                            setEditingSponsor({ ...editingSponsor, websiteUrl: e.target.value })
+                          }
+                          placeholder="Website URL"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label>Image</Label>
+                        <p className="text-sm text-muted-foreground">
+                          You can either paste an image URL or upload a file.
+                        </p>
+                        <Input
+                          value={editingSponsor?.imageUrl || ""}
+                          onChange={(e) =>
+                            setEditingSponsor({ ...editingSponsor!, imageUrl: e.target.value })
+                          }
+                          placeholder="Image URL"
+                        />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+
+                            const reader = new FileReader();
+                            reader.onloadend = () => {
+                              if (editingSponsor) {
+                                setEditingSponsor({
+                                  ...editingSponsor,
+                                  imageUrl: reader.result as string,
+                                });
+                              }
+                            };
+                            reader.readAsDataURL(file);
+                          }}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label>Description</Label>
+                        <Textarea
+                          value={editingSponsor.description}
+                          onChange={(e) =>
+                            setEditingSponsor({ ...editingSponsor, description: e.target.value })
+                          }
+                          placeholder="Description"
+                          rows={2}
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <Button onClick={handleEditSponsor}>Save</Button>
+                        <Button variant="outline" onClick={() => setEditingSponsor(null)}>
+                          Cancel
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <div className="flex items-center gap-4">
+                          <img
+                            src={sponsor.imageUrl}
+                            alt={`${sponsor.name} logo`}
+                            className="w-20 h-20 object-contain"
+                            loading="lazy"
+                          />
+                          <div>
+                            <h3 className="font-bold">Name: {sponsor.name}</h3>
+                            <p className="text-sm text-muted-foreground">
+                              Website: {sponsor.websiteUrl}
+                            </p>
+                          </div>
+                        </div>
+                        <p className="text-sm text-muted-foreground">{sponsor.description}</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          onClick={() => setEditingSponsor(sponsor)}
+                        >
+                          <Edit2 className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="text-destructive"
+                          onClick={() => handleDeleteSponsor(sponsor.id)}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
