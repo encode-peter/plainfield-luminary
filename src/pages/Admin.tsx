@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/lib/firebase";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -9,9 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Lock, Plus, Trash2, Edit2, Calendar, Link, Save, Eye, EyeOff } from "lucide-react";
-import { getEvents, addEvent, deleteEvent, updateEvent } from "@/data/events";
-import { getSiteSettings, saveSiteSettings } from "@/data/settings";
+import { Lock, Plus, Trash2, Edit2, Calendar, Save, Eye, EyeOff } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -19,19 +15,33 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { isAdminUser } from "@/data/user";
 import { Event } from "@/types/EventTypes";
 import { DateTimePicker } from "@/components/ui/date-time-picker";
-import { getSponsors, addSponsor, updateSponsor, deleteSponsor } from "@/data/sponsors";
 import { Sponsor } from "@/types/SponsorTypes";
+import {
+  handleAdminLogin,
+  loadInitialData,
+  handleAddEvent,
+  handleEditEvent,
+  handleDeleteEvent,
+  handleAddSponsor,
+  handleEditSponsor,
+  handleDeleteSponsor,
+  handleUpdateGalleryUrl,
+  handleUpdateDonationUrl,
+  handleUpdateFacebookUrl,
+  handleImageFile,
+} from "@/utils/adminUtils";
+import { useSiteSettings } from "@/hooks/use-setting";
 
 const Admin = () => {
+  const { galleryUrl, setGalleryUrl, donationUrl, setDonationUrl, facebookUrl, setFacebookUrl } =
+    useSiteSettings();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [localEvents, setLocalEvents] = useState<Event[]>([]);
-  const [galleryUrl, setGalleryUrl] = useState("");
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [editingEventDateTime, setEditingEventDateTime] = useState<Date | undefined>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -55,121 +65,6 @@ const Admin = () => {
   const [editingSponsor, setEditingSponsor] = useState<Sponsor | null>(null);
   const [isSponsorDialogOpen, setIsSponsorDialogOpen] = useState(false);
 
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const token = await user.getIdTokenResult();
-        if (token.claims.isAdmin) {
-          setIsAuthenticated(true);
-          loadInitialData();
-        }
-      }
-    });
-    return () => unsub();
-  }, []);
-
-  const loadInitialData = async () => {
-    const events = await getEvents();
-    setLocalEvents(events);
-    const sponsors = await getSponsors();
-    setSponsors(sponsors);
-    const settings = await getSiteSettings();
-    setGalleryUrl(settings.googlePhotosEmbedUrl || "");
-  };
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const token = await userCredential.user.getIdTokenResult();
-      const adminStatus = await isAdminUser(token.claims.user_id as string);
-      if (adminStatus) {
-        setIsAuthenticated(true);
-        loadInitialData();
-        toast({ title: "Welcome!", description: "You are now logged in as admin." });
-      } else {
-        toast({ title: "Access Denied", variant: "destructive" });
-      }
-    } catch (error) {
-      toast({ title: "Login Failed", description: "Invalid credentials", variant: "destructive" });
-    }
-  };
-
-  const handleAddEvent = async () => {
-    if (!newEvent.title || !newEvent.date) {
-      toast({
-        title: "Missing Fields",
-        description: "Title and date required",
-        variant: "destructive",
-      });
-      return;
-    }
-    const { id, ...eventData } = newEvent;
-    const generatedId = await addEvent(eventData);
-    const eventWithId: Event = {
-      ...eventData,
-      id: generatedId,
-    };
-    setLocalEvents((prev) => [...prev, eventWithId]);
-    toast({ title: "Event Added" });
-    setNewEvent({
-      id: "",
-      title: "",
-      date: "",
-      location: "",
-      description: "",
-      attendees: "",
-    });
-    setIsDialogOpen(false);
-  };
-
-  const handleEditEvent = async () => {
-    if (!editingEvent) return;
-    await updateEvent(editingEvent);
-    setLocalEvents((prev) => prev.map((e) => (e.id === editingEvent.id ? editingEvent : e)));
-    toast({ title: "Event Updated" });
-    setEditingEvent(null);
-  };
-
-  const handleDeleteEvent = async (event: Event) => {
-    await deleteEvent(event.id);
-    setLocalEvents((prev) => prev.filter((e) => e.id !== event.id));
-    toast({ title: "Event Deleted" });
-  };
-
-  const handleAddSponsor = async () => {
-    if (!newSponsor.name) {
-      toast({ title: "Sponsor name required", variant: "destructive" });
-      return;
-    }
-
-    const id = await addSponsor(newSponsor);
-    setSponsors((prev) => [...prev, { id, ...newSponsor }]);
-    setNewSponsor({ name: "", description: "", imageUrl: "", websiteUrl: "" });
-    setIsSponsorDialogOpen(false);
-    toast({ title: "Sponsor added" });
-  };
-
-  const handleEditSponsor = async () => {
-    if (!editingSponsor) return;
-
-    await updateSponsor(editingSponsor);
-    setSponsors((prev) => prev.map((s) => (s.id === editingSponsor.id ? editingSponsor : s)));
-    setEditingSponsor(null);
-    toast({ title: "Sponsor updated" });
-  };
-
-  const handleDeleteSponsor = async (id: string) => {
-    await deleteSponsor(id);
-    setSponsors((prev) => prev.filter((s) => s.id !== id));
-    toast({ title: "Sponsor deleted" });
-  };
-
-  const handleUpdateGalleryUrl = async () => {
-    await saveSiteSettings({ googlePhotosEmbedUrl: galleryUrl });
-    toast({ title: "Gallery Updated" });
-  };
-
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-background">
@@ -182,7 +77,20 @@ const Admin = () => {
               </div>
               <h1 className="font-display text-2xl font-bold mb-2">Admin Access</h1>
 
-              <form onSubmit={handleLogin} className="space-y-4 mt-6 text-left">
+              <form
+                onSubmit={(e) =>
+                  handleAdminLogin({
+                    e,
+                    email,
+                    password,
+                    setIsAuthenticated,
+                    loadInitialData: () =>
+                      loadInitialData({ setLocalEvents, setSponsors, setGalleryUrl }),
+                    toast,
+                  })
+                }
+                className="space-y-4 mt-6 text-left"
+              >
                 <Label>Email</Label>
                 <Input value={email} onChange={(e) => setEmail(e.target.value)} />
 
@@ -293,7 +201,18 @@ const Admin = () => {
                         rows={3}
                       />
                     </div>
-                    <Button onClick={handleAddEvent} className="w-full">
+                    <Button
+                      onClick={() =>
+                        handleAddEvent({
+                          newEvent,
+                          setLocalEvents,
+                          setNewEvent,
+                          setIsDialogOpen,
+                          toast,
+                        })
+                      }
+                      className="w-full"
+                    >
                       Add Event
                     </Button>
                   </div>
@@ -376,7 +295,18 @@ const Admin = () => {
                         />
                       </div>
                       <div className="flex gap-2">
-                        <Button onClick={handleEditEvent}>Save Changes</Button>
+                        <Button
+                          onClick={() =>
+                            handleEditEvent({
+                              editingEvent,
+                              setLocalEvents,
+                              setEditingEvent,
+                              toast,
+                            })
+                          }
+                        >
+                          Save Changes
+                        </Button>
                         <Button variant="outline" onClick={() => setEditingEvent(null)}>
                           Cancel
                         </Button>
@@ -414,7 +344,7 @@ const Admin = () => {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => handleDeleteEvent(event)}
+                          onClick={() => handleDeleteEvent({ event, setLocalEvents, toast })}
                           className="text-destructive hover:text-destructive"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -474,18 +404,21 @@ const Admin = () => {
                         value={newSponsor.imageUrl}
                         onChange={(e) => setNewSponsor({ ...newSponsor, imageUrl: e.target.value })}
                       />
-                      <input
+                      <Input
                         type="file"
                         accept="image/*"
-                        onChange={async (e) => {
+                        onChange={(e) => {
                           const file = e.target.files?.[0];
                           if (!file) return;
-
-                          const reader = new FileReader();
-                          reader.onloadend = () => {
-                            setNewSponsor({ ...newSponsor, imageUrl: reader.result as string });
-                          };
-                          reader.readAsDataURL(file);
+                          const isValid = handleImageFile({
+                            file,
+                            toast,
+                            onSuccess: (base64) =>
+                              setNewSponsor({ ...newSponsor, imageUrl: base64 }),
+                          });
+                          if (!isValid) {
+                            e.target.value = "";
+                          }
                         }}
                       />
                     </div>
@@ -500,7 +433,18 @@ const Admin = () => {
                         }
                       />
                     </div>
-                    <Button onClick={handleAddSponsor} className="w-full">
+                    <Button
+                      onClick={() =>
+                        handleAddSponsor({
+                          newSponsor,
+                          setSponsors,
+                          setNewSponsor,
+                          setIsSponsorDialogOpen,
+                          toast,
+                        })
+                      }
+                      className="w-full"
+                    >
                       Add Sponsor
                     </Button>
                   </div>
@@ -547,23 +491,24 @@ const Admin = () => {
                           }
                           placeholder="Image URL"
                         />
-                        <input
+                        <Input
                           type="file"
                           accept="image/*"
-                          onChange={async (e) => {
+                          onChange={(e) => {
                             const file = e.target.files?.[0];
-                            if (!file) return;
-
-                            const reader = new FileReader();
-                            reader.onloadend = () => {
-                              if (editingSponsor) {
+                            if (!file || !editingSponsor) return;
+                            const isValid = handleImageFile({
+                              file,
+                              toast,
+                              onSuccess: (base64) =>
                                 setEditingSponsor({
                                   ...editingSponsor,
-                                  imageUrl: reader.result as string,
-                                });
-                              }
-                            };
-                            reader.readAsDataURL(file);
+                                  imageUrl: base64,
+                                }),
+                            });
+                            if (!isValid) {
+                              e.target.value = "";
+                            }
                           }}
                         />
                       </div>
@@ -580,7 +525,18 @@ const Admin = () => {
                         />
                       </div>
                       <div className="flex gap-2">
-                        <Button onClick={handleEditSponsor}>Save</Button>
+                        <Button
+                          onClick={() =>
+                            handleEditSponsor({
+                              editingSponsor,
+                              setSponsors,
+                              setEditingSponsor,
+                              toast,
+                            })
+                          }
+                        >
+                          Save
+                        </Button>
                         <Button variant="outline" onClick={() => setEditingSponsor(null)}>
                           Cancel
                         </Button>
@@ -590,17 +546,25 @@ const Admin = () => {
                     <div className="flex justify-between items-center">
                       <div>
                         <div className="flex items-center gap-4">
-                          <img
-                            src={sponsor.imageUrl}
-                            alt={`${sponsor.name} logo`}
-                            className="w-20 h-20 object-contain"
-                            loading="lazy"
-                          />
+                          {sponsor.imageUrl ? (
+                            <img
+                              src={sponsor.imageUrl}
+                              alt={`${sponsor.name} logo`}
+                              className="w-20 h-20 object-contain"
+                              loading="lazy"
+                            />
+                          ) : (
+                            <div className="w-20 h-20 flex items-center justify-center">
+                              <span className="text-xs text-muted-foreground">No Image</span>
+                            </div>
+                          )}
                           <div>
                             <h3 className="font-bold">Name: {sponsor.name}</h3>
-                            <p className="text-sm text-muted-foreground">
-                              Website: {sponsor.websiteUrl}
-                            </p>
+                            {sponsor.websiteUrl && (
+                              <p className="text-sm text-muted-foreground">
+                                Website: {sponsor.websiteUrl}
+                              </p>
+                            )}
                           </div>
                         </div>
                         <p className="text-sm text-muted-foreground">{sponsor.description}</p>
@@ -617,7 +581,9 @@ const Admin = () => {
                           size="icon"
                           variant="ghost"
                           className="text-destructive"
-                          onClick={() => handleDeleteSponsor(sponsor.id)}
+                          onClick={() =>
+                            handleDeleteSponsor({ id: sponsor.id, setSponsors, toast })
+                          }
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -629,27 +595,71 @@ const Admin = () => {
             </div>
           </Card>
 
-          {/* Gallery URL Section */}
-          <Card className="p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <Link className="h-5 w-5 text-primary" />
-              <h2 className="text-xl font-bold">Gallery Embed URL</h2>
+          {/* Site URLs Section */}
+          <Card className="p-6 mb-8">
+            <div className="mb-4">
+              <h2 className="text-xl font-bold">Site URLs</h2>
+              <p className="text-sm text-muted-foreground">
+                Note: Refresh the public site to see changes.
+              </p>
             </div>
-            <div className="flex gap-4">
-              <Input
-                value={galleryUrl}
-                onChange={(e) => setGalleryUrl(e.target.value)}
-                placeholder="Paste Google Photos album embed URL here"
-                className="flex-1"
-              />
-              <Button onClick={handleUpdateGalleryUrl}>
-                <Save className="h-4 w-4 mr-2" />
-                Save
-              </Button>
+
+            <div className="space-y-4">
+              {/* Donation URL */}
+              <div className="flex gap-4 items-center">
+                <Label className="w-32">Donation URL</Label>
+                <Input
+                  value={donationUrl}
+                  onChange={(e) => setDonationUrl(e.target.value)}
+                  placeholder="Paste donation link here"
+                  className="flex-1"
+                />
+                <Button
+                  onClick={() => handleUpdateDonationUrl({ donationUrl, toast, setDonationUrl })}
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  Save
+                </Button>
+              </div>
+
+              {/* Facebook URL */}
+              <div className="flex gap-4 items-center">
+                <Label className="w-32">Facebook URL</Label>
+                <Input
+                  value={facebookUrl}
+                  onChange={(e) => setFacebookUrl(e.target.value)}
+                  placeholder="Paste Facebook page URL here"
+                  className="flex-1"
+                />
+                <Button
+                  onClick={() => handleUpdateFacebookUrl({ facebookUrl, toast, setFacebookUrl })}
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  Save
+                </Button>
+              </div>
+
+              {/* Gallery URL */}
+              <div className="flex gap-4 items-center">
+                <Label className="w-32">Gallery URL</Label>
+                <Input
+                  value={galleryUrl}
+                  onChange={(e) => setGalleryUrl(e.target.value)}
+                  placeholder="Paste Google Photos album embed URL here"
+                  className="flex-1"
+                />
+                <Button
+                  onClick={() => handleUpdateGalleryUrl({ galleryUrl, toast, setGalleryUrl })}
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  Save
+                </Button>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                To get the embed URL: Open Google Photos album → Share → Get link → Create embed
+                link
+              </p>
             </div>
-            <p className="text-sm text-muted-foreground mt-2">
-              To get the embed URL: Open Google Photos album → Share → Get link → Create embed link
-            </p>
           </Card>
         </div>
       </main>

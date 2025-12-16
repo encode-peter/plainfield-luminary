@@ -1,20 +1,11 @@
-import { useEffect, useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Images } from "lucide-react";
-import { getSiteSettings } from "@/data/settings";
+import { useSiteSettings } from "@/hooks/use-setting";
+import { HashLink } from "@/components/HashLink";
 
 const Gallery = () => {
-  const [galleryEmbedUrl, setGalleryEmbedUrl] = useState("");
-
-  const handleSiteSettings = async () => {
-    const settings = await getSiteSettings();
-    setGalleryEmbedUrl(settings.googlePhotosEmbedUrl || "");
-  };
-
-  useEffect(() => {
-    handleSiteSettings();
-  }, []);
+  const { galleryUrl, facebookUrl } = useSiteSettings();
 
   return (
     <div className="min-h-screen bg-background">
@@ -37,10 +28,10 @@ const Gallery = () => {
           </div>
 
           {/* Gallery Content */}
-          {galleryEmbedUrl ? (
+          {galleryUrl ? (
             <div className="w-full aspect-[16/9] max-w-5xl mx-auto rounded-xl overflow-hidden shadow-elegant">
               <iframe
-                src={galleryEmbedUrl}
+                src={galleryUrl}
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -62,14 +53,12 @@ const Gallery = () => {
                   Our photo gallery is being set up. In the meantime, check out our Facebook page
                   for the latest photos!
                 </p>
-                <a
-                  href="https://www.facebook.com/people/Plainfield-Luminary-Program/61560355185282/"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <HashLink
+                  to={facebookUrl}
                   className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors"
                 >
                   Visit our Facebook Page →
-                </a>
+                </HashLink>
               </div>
             </div>
           )}

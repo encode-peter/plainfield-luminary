@@ -1,8 +1,10 @@
 import { Facebook } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { HashLink } from "./HashLink";
+import { useSiteSettings } from "@/hooks/use-setting";
 
 export const Footer = () => {
+  const { facebookUrl } = useSiteSettings();
   return (
     <footer className="bg-card border-t border-border py-12 px-4">
       <div className="container mx-auto">
@@ -40,15 +42,13 @@ export const Footer = () => {
           {/* Contact */}
           <div>
             <h3 className="font-semibold text-lg mb-4">Connect With Us</h3>
-            <a
-              href="https://www.facebook.com/p/Plainfield-Luminary-Program-61560355185282/"
-              target="_blank"
-              rel="noopener noreferrer"
+            <HashLink
+              to={facebookUrl}
               className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
             >
               <Facebook className="w-5 h-5" />
               Follow us on Facebook
-            </a>
+            </HashLink>
           </div>
         </div>
 

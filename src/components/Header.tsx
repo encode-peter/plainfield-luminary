@@ -4,9 +4,11 @@ import { Menu, X, Facebook } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HashLink } from "@/components/HashLink";
 import logo from "@/assets/logo.png";
+import { useSiteSettings } from "@/hooks/use-setting";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { donationUrl, facebookUrl } = useSiteSettings();
 
   const navLinks = [
     { name: "Home", href: "/" },
@@ -22,7 +24,7 @@ export const Header = () => {
           {/* Logo */}
           <HashLink to="/" className="flex items-center gap-2">
             <img src={logo} alt="Plainfield Luminary Program" className="h-10 w-auto" />
-            <span className="font-display text-lg font-bold text-primary hidden sm:block">
+            <span className="font-display text-2xl font-bold text-primary hidden sm:block">
               Plainfield Luminaries
             </span>
           </HashLink>
@@ -41,7 +43,7 @@ export const Header = () => {
 
             {/* Social Links */}
             <HashLink
-              to="https://www.facebook.com/people/Plainfield-Luminary-Program/61560355185282/"
+              to={facebookUrl}
               className="text-foreground/80 hover:text-primary transition-colors"
               aria-label="Facebook"
             >
@@ -49,9 +51,7 @@ export const Header = () => {
             </HashLink>
 
             <Button size="sm" className="ml-2">
-              <HashLink to="https://www.zeffy.com/en-US/donation-form/light-and-unite-plainfield">
-                Donate
-              </HashLink>
+              <HashLink to={donationUrl}>Donate</HashLink>
             </Button>
           </nav>
 
@@ -85,7 +85,7 @@ export const Header = () => {
 
             <div className="flex items-center gap-4 pt-2">
               <HashLink
-                to="https://www.facebook.com/people/Plainfield-Luminary-Program/61560355185282/"
+                to={facebookUrl}
                 className="text-foreground/80 hover:text-primary transition-colors"
                 aria-label="Facebook"
               >
@@ -94,9 +94,7 @@ export const Header = () => {
             </div>
 
             <Button size="sm" className="w-fit">
-              <HashLink to="https://www.zeffy.com/en-US/donation-form/light-and-unite-plainfield">
-                Donate
-              </HashLink>
+              <HashLink to={donationUrl}>Donate</HashLink>
             </Button>
           </div>
         </nav>

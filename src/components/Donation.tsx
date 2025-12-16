@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useSiteSettings } from "@/hooks/use-setting";
 import { Heart, Gift, Star, Users2 } from "lucide-react";
 
 export const Donation = () => {
-  const donationUrl = "https://www.zeffy.com/en-US/donation-form/light-and-unite-plainfield";
+  const { donationUrl } = useSiteSettings();
 
   const impact = [
     {

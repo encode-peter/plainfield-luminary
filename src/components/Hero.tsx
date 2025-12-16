@@ -5,11 +5,15 @@ import community2 from "@/assets/community-2.jpg";
 import community3 from "@/assets/community-3.jpg";
 import community4 from "@/assets/community-4.jpg";
 import community5 from "@/assets/community-5.jpg";
+import community6 from "@/assets/community-6.jpg";
 import { HashLink } from "./HashLink";
+import { useSiteSettings } from "@/hooks/use-setting";
 
-const images = [community1, community2, community3, community4, community5];
+const images = [community1, community2, community3, community4, community5, community6];
 
 export const Hero = () => {
+  const { donationUrl } = useSiteSettings();
+
   const [currentImage, setCurrentImage] = useState(0);
 
   useEffect(() => {
@@ -37,7 +41,7 @@ export const Hero = () => {
             alt={`Plainfield Luminary Program community ${index + 1}`}
             className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-black/15" />
+          <div className="absolute inset-0 bg-black/30" />
         </div>
       ))}
 
@@ -60,7 +64,7 @@ export const Hero = () => {
         <div className="flex flex-col items-center text-center space-y-8">
           {/* Title */}
           <div className="space-y-4">
-            <h1 className="text-5xl md:text-7xl font-bold text-white drop-shadow-lg">
+            <h1 className="text-5xl md:text-7xl font-bold text-luminary-gold drop-shadow-lg">
               Plainfield Luminary Program
             </h1>
             <p className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto">
@@ -73,12 +77,7 @@ export const Hero = () => {
             <Button
               size="lg"
               className="bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 hover:scale-105"
-              onClick={() =>
-                window.open(
-                  "https://www.zeffy.com/en-US/donation-form/light-and-unite-plainfield",
-                  "_blank"
-                )
-              }
+              onClick={() => window.open(donationUrl, "_blank")}
             >
               Donate Now
             </Button>
@@ -100,9 +99,7 @@ export const Hero = () => {
                 key={index}
                 onClick={() => setCurrentImage(index)}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  index === currentImage
-                    ? "bg-primary scale-125"
-                    : "bg-white/50 hover:bg-white/70"
+                  index === currentImage ? "bg-primary scale-125" : "bg-white/50 hover:bg-white/70"
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
               />

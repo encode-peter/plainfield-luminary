@@ -5,9 +5,10 @@ import { Spinner } from "@/components/ui/spinner";
 import { Calendar, Clock, MapPin, Users } from "lucide-react";
 import { getEvents } from "@/data/events";
 import { Event } from "@/types/EventTypes";
+import { useSiteSettings } from "@/hooks/use-setting";
 
 export const Events = () => {
-  const donationUrl = "https://www.zeffy.com/en-US/donation-form/light-and-unite-plainfield";
+  const { donationUrl, facebookUrl } = useSiteSettings();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -111,12 +112,7 @@ export const Events = () => {
             <Button
               variant="outline"
               className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-              onClick={() =>
-                window.open(
-                  "https://www.facebook.com/p/Plainfield-Luminary-Program-61560355185282/",
-                  "_blank"
-                )
-              }
+              onClick={() => window.open(facebookUrl, "_blank")}
             >
               Follow on Facebook
             </Button>

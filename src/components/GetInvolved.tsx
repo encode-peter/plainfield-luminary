@@ -2,9 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Calendar, DollarSign, HandHeart } from "lucide-react";
 import { HashLink } from "./HashLink";
+import { useSiteSettings } from "@/hooks/use-setting";
 
 export const GetInvolved = () => {
-  const donationUrl = "https://www.zeffy.com/en-US/donation-form/light-and-unite-plainfield";
+  const { donationUrl } = useSiteSettings();
 
   const ways = [
     {

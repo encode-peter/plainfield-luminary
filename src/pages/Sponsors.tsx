@@ -26,17 +26,17 @@ const Sponsors = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <Header />
       {/* Hero Section */}
       <section className="pt-24 pb-16 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent" />
+        <div className="absolute inset-0 bg-background mb-8" />
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center animate-fade-in">
             <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
               Our <span className="text-primary">Sponsors</span>
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-xl text-foreground max-w-3xl mx-auto">
               The Plainfield Luminary Program is made possible by the generous support of our
               sponsors. Together, we're lighting up our community.
             </p>
@@ -56,11 +56,11 @@ const Sponsors = () => {
       </section>
 
       {/* Sponsor */}
-      <section>
+      <section className="bg-card py-20">
         <div className="container mx-auto px-4">
-          <div className="flex justify-center items-center gap-4 overflow-hidden">
+          <div className="flex justify-center items-center flex-wrap gap-4 gap-y-10 overflow-hidden">
             {sponsors.length === 0 && !loading && (
-              <p className="text-muted-foreground col-span-full text-center">
+              <p className="text-foreground col-span-full text-center">
                 No Sponsors at the moment. Please check back later!
               </p>
             )}
@@ -70,11 +70,11 @@ const Sponsors = () => {
               sponsors.map((sponsor, index) => (
                 <div
                   key={sponsor.name}
-                  className="w-96 h-96 p-6 bg-card border border-border rounded-xl hover:border-primary/50 transition-all duration-300 hover:shadow-lg shadow-primary/30 animate-fade-in"
+                  className="w-96 h-96 p-6 bg-background border border-border rounded-xl hover:border-primary/50 transition-all duration-300 hover:shadow-lg shadow-primary/30 animate-fade-in"
                   style={{ animationDelay: `${index * 0.1 + index * 0.1}s` }}
                 >
                   <div className="flex flex-col items-center justify-center gap-4">
-                    <div className="w-52 h-52 flex-shrink-0 rounded-lg bg-background/30 flex items-center justify-center">
+                    <div className="w-52 h-52 flex-shrink-0 rounded-lg bg-background flex items-center justify-center">
                       {sponsor.imageUrl ? (
                         <img
                           src={sponsor.imageUrl}
@@ -91,7 +91,10 @@ const Sponsors = () => {
                     <div>
                       {sponsor.websiteUrl ? (
                         <h3 className="text-lg font-semibold text-foreground mb-1 flex justify-center">
-                          <HashLink to={sponsor.websiteUrl} className="flex justify-center items-center border-primary gap-2 hover:border-b hover:scale-105 transition-all">
+                          <HashLink
+                            to={sponsor.websiteUrl}
+                            className="flex justify-center items-center border-primary gap-2 hover:border-b hover:scale-105 transition-all"
+                          >
                             {sponsor.name} <ExternalLink size={16} />
                           </HashLink>
                         </h3>
@@ -100,7 +103,7 @@ const Sponsors = () => {
                           {sponsor.name}
                         </h3>
                       )}
-                      <p className="text-muted-foreground text-sm overflow-y-auto max-h-24">
+                      <p className="text-foreground text-sm overflow-y-auto max-h-24">
                         {expandedSponsors[sponsor.name] || sponsor.description.length <= 150
                           ? sponsor.description
                           : sponsor.description.slice(0, 150) + ".."}
@@ -128,13 +131,13 @@ const Sponsors = () => {
       </section>
 
       {/* Become a Sponsor CTA */}
-      <section className="py-20 bg-gradient-to-t from-accent/20 to-transparent">
+      <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto animate-fade-in">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
               Become a <span className="text-primary">Sponsor</span>
             </h2>
-            <p className="text-muted-foreground mb-8">
+            <p className="text-foreground mb-8">
               Join our community of sponsors and help light up Plainfield. Your support makes a
               lasting impact on our neighborhood.
             </p>
