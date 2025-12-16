@@ -37,7 +37,7 @@ export const Hero = () => {
             alt={`Plainfield Luminary Program community ${index + 1}`}
             className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-black/50" />
+          <div className="absolute inset-0 bg-black/15" />
         </div>
       ))}
 
