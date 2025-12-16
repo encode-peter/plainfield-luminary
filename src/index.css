@@ -29,10 +29,10 @@ div.index-section > section:nth-child(even) {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 0 0% 98%;
     --foreground: 0 0% 15%;
 
-    --card: 0 0% 98%;
+    --card: 0 0% 90%;
     --card-foreground: 0 0% 15%;
 
     --popover: 0 0% 100%;
