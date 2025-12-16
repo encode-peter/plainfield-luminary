@@ -16,7 +16,7 @@ export const Header = () => {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-primary/20">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -68,7 +68,7 @@ export const Header = () => {
         {/* Mobile Navigation */}
 
         <nav
-          className={`md:hidden border-t border-primary/20  transition-all duration-700 ease-in-out ${
+          className={`md:hidden border-t border-border transition-all duration-700 ease-in-out ${
             isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
           }`}
         >

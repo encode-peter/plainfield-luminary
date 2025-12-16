@@ -20,7 +20,10 @@ export const Hero = () => {
   }, []);
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section
+      id="hero"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+    >
       {/* Background image carousel */}
       {images.map((img, index) => (
         <div
@@ -34,7 +37,7 @@ export const Hero = () => {
             alt={`Plainfield Luminary Program community ${index + 1}`}
             className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-background/70" />
+          <div className="absolute inset-0 bg-black/50" />
         </div>
       ))}
 
@@ -43,7 +46,7 @@ export const Hero = () => {
         {[...Array(30)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-1 h-1 bg-primary rounded-full animate-twinkle"
+            className="absolute w-1 h-1 bg-white rounded-full animate-twinkle"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -57,10 +60,10 @@ export const Hero = () => {
         <div className="flex flex-col items-center text-center space-y-8">
           {/* Title */}
           <div className="space-y-4">
-            <h1 className="text-5xl md:text-7xl font-bold glow-text">
+            <h1 className="text-5xl md:text-7xl font-bold text-white drop-shadow-lg">
               Plainfield Luminary Program
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto">
               Lighting Up Our Community with Hope, Joy, and Togetherness
             </p>
           </div>
@@ -69,7 +72,7 @@ export const Hero = () => {
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
             <Button
               size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground glow-effect transition-all duration-300 hover:scale-105"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 hover:scale-105"
               onClick={() =>
                 window.open(
                   "https://www.zeffy.com/en-US/donation-form/light-and-unite-plainfield",
@@ -99,7 +102,7 @@ export const Hero = () => {
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
                   index === currentImage
                     ? "bg-primary scale-125"
-                    : "bg-muted-foreground/50 hover:bg-muted-foreground"
+                    : "bg-white/50 hover:bg-white/70"
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
