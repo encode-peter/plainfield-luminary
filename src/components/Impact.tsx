@@ -37,11 +37,11 @@ export const Impact = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
           {stats.map((stat, index) => (
             <Card
               key={index}
-              className="p-6 bg-background border-border text-center hover:border-primary transition-all duration-300 group"
+              className="p-6 bg-card border-border text-center hover:border-primary transition-all duration-300 group"
             >
               <div className="space-y-2">
                 <div className="text-4xl md:text-5xl font-bold text-primary glow-text group-hover:scale-110 transition-transform">
@@ -57,7 +57,7 @@ export const Impact = () => {
         <div className="mt-16 max-w-4xl mx-auto">
           <Card className="p-8 bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/20">
             <h3 className="text-2xl font-bold mb-4 text-center">Where Your Donations Go</h3>
-            <div className="space-y-3 text-muted-foreground">
+            <div className="space-y-3 text-foreground">
               <p>
                 <span className="text-primary font-semibold">• Materials & Supplies:</span> Luminaries, candles, sand, and all the essentials to create our beautiful display
               </p>

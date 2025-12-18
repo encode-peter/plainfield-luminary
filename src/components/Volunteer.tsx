@@ -82,7 +82,7 @@ export const Volunteer = () => {
       <div className="container mx-auto max-w-4xl">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-4 glow-text">Become a Volunteer</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-foreground max-w-2xl mx-auto">
             Join our dedicated team of volunteers and help create magic in our community. Whether
             you can help with setup, lighting, or event coordination, we'd love to have you!
           </p>

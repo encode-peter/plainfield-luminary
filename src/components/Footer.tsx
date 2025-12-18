@@ -12,7 +12,7 @@ export const Footer = () => {
           {/* Logo and description */}
           <div className="flex flex-col items-start space-y-4">
             <img src={logo} alt="Plainfield Luminary Program" className="w-16 h-16" />
-            <p className="text-muted-foreground">
+            <p className="text-foreground">
               Bringing light and community together in Plainfield.
             </p>
           </div>
@@ -20,7 +20,7 @@ export const Footer = () => {
           {/* Quick Links */}
           <div>
             <h3 className="font-semibold text-lg mb-4">Quick Links</h3>
-            <ul className="space-y-2 text-muted-foreground">
+            <ul className="space-y-2 text-foreground">
               <li>
                 <HashLink to="/#about" className="hover:text-primary transition-colors">
                   About
@@ -44,7 +44,7 @@ export const Footer = () => {
             <h3 className="font-semibold text-lg mb-4">Connect With Us</h3>
             <HashLink
               to={facebookUrl}
-              className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
+              className="inline-flex items-center gap-2 text-foreground hover:text-primary transition-colors"
             >
               <Facebook className="w-5 h-5" />
               Follow us on Facebook
@@ -52,7 +52,7 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-border pt-8 text-center text-muted-foreground">
+        <div className="border-t border-border pt-8 text-center text-foreground">
           <p>&copy; {new Date().getFullYear()} Plainfield Luminary Program. All rights reserved.</p>
         </div>
       </div>

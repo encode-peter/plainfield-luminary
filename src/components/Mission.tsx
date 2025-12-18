@@ -22,38 +22,38 @@ export const Mission = () => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 mt-12">
-            <Card className="p-6 bg-background/50 backdrop-blur border-border text-center">
+            <Card className="p-6 bg-background backdrop-blur border-border text-center">
               <div className="flex justify-center mb-4">
                 <div className="p-3 bg-primary/10 rounded-full">
                   <Sparkles className="w-6 h-6 text-primary" />
                 </div>
               </div>
               <h3 className="font-semibold text-lg mb-2">Illuminate</h3>
-              <p className="text-muted-foreground text-sm">
+              <p className="text-foreground text-sm">
                 Light up our streets with thousands of glowing luminaries
               </p>
             </Card>
 
-            <Card className="p-6 bg-background/50 backdrop-blur border-border text-center">
+            <Card className="p-6 bg-background backdrop-blur border-border text-center">
               <div className="flex justify-center mb-4">
                 <div className="p-3 bg-secondary/10 rounded-full">
                   <TreePine className="w-6 h-6 text-secondary" />
                 </div>
               </div>
               <h3 className="font-semibold text-lg mb-2">Celebrate</h3>
-              <p className="text-muted-foreground text-sm">
+              <p className="text-foreground text-sm">
                 Honor loved ones and celebrate the season together
               </p>
             </Card>
 
-            <Card className="p-6 bg-background/50 backdrop-blur border-border text-center">
+            <Card className="p-6 bg-background backdrop-blur border-border text-center">
               <div className="flex justify-center mb-4">
                 <div className="p-3 bg-accent/10 rounded-full">
                   <MapPin className="w-6 h-6 text-accent" />
                 </div>
               </div>
               <h3 className="font-semibold text-lg mb-2">Unite</h3>
-              <p className="text-muted-foreground text-sm">
+              <p className="text-foreground text-sm">
                 Strengthen bonds and build lasting community connections
               </p>
             </Card>

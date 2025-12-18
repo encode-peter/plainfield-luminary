@@ -53,14 +53,14 @@ export const Donation = () => {
           {impact.map((item, index) => (
             <Card
               key={index}
-              className="p-6 bg-background/80 backdrop-blur border-border hover:border-primary transition-all duration-300"
+              className="p-6 bg-card backdrop-blur border-border hover:border-primary transition-all duration-300"
             >
               <div className="flex flex-col items-center text-center space-y-3">
                 <div className="p-3 bg-primary/10 rounded-full">
                   <item.icon className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="font-semibold text-lg">{item.title}</h3>
-                <p className="text-muted-foreground text-sm">{item.description}</p>
+                <p className="text-foreground text-sm">{item.description}</p>
               </div>
             </Card>
           ))}
@@ -70,7 +70,7 @@ export const Donation = () => {
         <div className="max-w-2xl mx-auto">
           <Card className="p-8 md:p-12 bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/20 text-center">
             <h3 className="text-2xl md:text-3xl font-bold mb-4">Make Your Donation Today</h3>
-            <p className="text-muted-foreground mb-8">
+            <p className="text-foreground mb-8">
               Join us in lighting up Plainfield this holiday season. Your generosity helps create a
               magical experience for the entire community and supports local causes.
             </p>
@@ -82,7 +82,7 @@ export const Donation = () => {
               <Heart className="w-5 h-5 mr-2" />
               Donate Now
             </Button>
-            <p className="text-sm text-muted-foreground mt-4">
+            <p className="text-sm text-foreground mt-4">
               Secure donation processing powered by Zeffy
             </p>
           </Card>

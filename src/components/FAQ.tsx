@@ -74,7 +74,7 @@ export const FAQ = () => {
           <h2 className="text-4xl md:text-5xl font-bold glow-text mb-4">
             Frequently Asked Questions
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-foreground max-w-2xl mx-auto">
             Everything you need to know about the Plainfield Luminary Program
           </p>
         </div>
@@ -85,12 +85,12 @@ export const FAQ = () => {
               <AccordionItem
                 key={index}
                 value={`item-${index}`}
-                className="bg-background/50 rounded-lg border border-primary/20 px-6 overflow-hidden"
+                className="bg-background rounded-lg border border-primary/20 px-6 overflow-hidden"
               >
                 <AccordionTrigger className="text-left hover:no-underline hover:text-primary transition-colors">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">
+                <AccordionContent className="text-foreground border-t pt-3">
                   {faq.answer}
                   {faq.link && (
                     <a

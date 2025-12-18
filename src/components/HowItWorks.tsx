@@ -36,7 +36,7 @@ export const HowItWorks = () => {
           <h2 className="text-4xl md:text-5xl font-bold mb-4 glow-text">
             How It Works
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-xl text-foreground max-w-3xl mx-auto">
             Participating in the Plainfield Luminary Program is simple and rewarding. 
             Here's how we bring the magic of light to our community.
           </p>
@@ -46,7 +46,7 @@ export const HowItWorks = () => {
           {steps.map((step, index) => (
             <Card
               key={index}
-              className="p-6 bg-card border-border hover:border-primary transition-all duration-300 relative overflow-hidden group"
+              className="p-6 bg-background border-border hover:border-primary transition-all duration-300 relative overflow-hidden group"
             >
               {/* Number badge */}
               <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-bold text-primary group-hover:bg-primary/20 transition-colors">

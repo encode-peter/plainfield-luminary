@@ -25,10 +25,10 @@ export const Sponsors = () => {
     <section id="sponsors" className="py-16 overflow-hidden">
       <div className="container mx-auto px-4 mb-8">
         <div className="text-center animate-fade-in">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 glow-text">
             Meet Our <span className="text-primary">Sponsors</span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-foreground max-w-2xl mx-auto">
             Thank you to our generous sponsors who help light up Plainfield
           </p>
         </div>
@@ -40,7 +40,7 @@ export const Sponsors = () => {
         <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10" />
         <div className="flex justify-end items-center animate-marquee">
           {sponsors.length === 0 && !loading && (
-            <p className="text-muted-foreground col-span-full text-center">
+            <p className="text-foreground col-span-full text-center">
               No Sponsors at the moment. Please check back later!
             </p>
           )}
@@ -50,10 +50,10 @@ export const Sponsors = () => {
             sponsors.map((sponsor, index) => (
               <div
                 key={index}
-                className="mx-6 px-8 py-4 bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10"
+                className="mx-6 px-8 py-4 bg-background backdrop-blur-sm border border-border/50 rounded-xl hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10"
               >
                 <div className="flex flex-col items-center gap-3">
-                  <div className="w-24 h-24 flex-shrink-0 rounded-lg bg-background/30 overflow-hidden flex items-center justify-center">
+                  <div className="w-24 h-24 flex-shrink-0 rounded-lg bg-card overflow-hidden flex items-center justify-center">
                     <img
                       src={sponsor.imageUrl}
                       alt={`${sponsor.name} logo`}

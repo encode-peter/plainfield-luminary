@@ -37,7 +37,7 @@ export const Events = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {events.length === 0 && !loading && (
-            <p className="text-muted-foreground col-span-full text-center">
+            <p className="text-foreground col-span-full text-center">
               No upcoming events at the moment. Please check back later!
             </p>
           )}
@@ -53,7 +53,7 @@ export const Events = () => {
                 <div className="space-y-4 flex-grow">
                   <h3 className="text-2xl font-bold text-primary">{event.title}</h3>
 
-                  <div className="space-y-3 text-muted-foreground">
+                  <div className="space-y-3 text-foreground">
                     {event.date && (
                       <div className="flex items-start gap-3">
                         <Calendar className="w-5 h-5 text-secondary mt-0.5 flex-shrink-0" />
@@ -83,7 +83,7 @@ export const Events = () => {
                     )}
                   </div>
                   {event.description && (
-                    <p className="text-muted-foreground pt-2 border-t border-border">
+                    <p className="text-foreground pt-2 border-t border-border">
                       {event.description}
                     </p>
                   )}
@@ -105,7 +105,7 @@ export const Events = () => {
         <div className="mt-16 text-center">
           <Card className="p-8 max-w-2xl mx-auto bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/20">
             <h3 className="text-2xl font-bold mb-4">Stay Updated</h3>
-            <p className="text-muted-foreground mb-6">
+            <p className="text-foreground mb-6">
               Follow us on Facebook for the latest announcements, date confirmations, and
               behind-the-scenes updates about the Plainfield Luminary Program.
             </p>

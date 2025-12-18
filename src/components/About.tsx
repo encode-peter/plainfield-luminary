@@ -37,14 +37,14 @@ export const About = () => {
           {features.map((feature, index) => (
             <Card
               key={index}
-              className="p-8 bg-background border-border hover:border-primary transition-all duration-300 hover:shadow-lg group"
+              className="p-8 bg-card border-border hover:border-primary transition-all duration-300 hover:shadow-lg group"
             >
               <div className="flex flex-col items-center text-center space-y-4">
                 <div className="p-4 bg-primary/10 rounded-full group-hover:bg-primary/20 transition-colors">
                   <feature.icon className="w-8 h-8 text-primary" />
                 </div>
                 <h3 className="text-2xl font-semibold">{feature.title}</h3>
-                <p className="text-muted-foreground">{feature.description}</p>
+                <p className="text-foreground">{feature.description}</p>
               </div>
             </Card>
           ))}
